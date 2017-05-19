@@ -43,12 +43,10 @@ function! vimterm#toggle()
 endfunction
 
 function! vimterm#exec(cmd)
-  if win_gotoid(s:vimterm_window)
-    call vimterm#close()
-  else
-    new vimterm | set nobuflisted | wincmd j
-    execute 'resize ' . g:vimterm_height
-    call termopen(a:cmd)
-    startinsert
+  if !win_gotoid(s:vimterm_window)
+    vimterm#open()
   endif
+  exec bufwinnr(s:vimterm_buf) . "wincmd w"
+  exec a:cmd
+  call win_gotoid(s:vimterm_window)
 endfunction
